@@ -91668,7 +91668,7 @@ ${messageBytes.length}`);
   var _chunks = [];
   var _frames = [];
   var _config = null;
-  var canvas = document.getElementById("video-decoder");
+  var canvas = document.createElement("canvas");
   var renderer = new Canvas2DRenderer(canvas);
   var decoder;
   var _onFrameCallback;

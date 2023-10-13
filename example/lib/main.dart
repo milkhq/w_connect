@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _wConnectPlugin.loadVideo(
-          url: './rgba.mp4',
+          url: './mittria_360.mp4',
           callback: (img) {
             setState(() {
               _image = img;

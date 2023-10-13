@@ -97,7 +97,7 @@ window.toggleMusic = function toggleMusic() {
 let _chunks = [];
 let _frames = [];
 let _config = null;
-const canvas = document.getElementById("video-decoder");
+const canvas = document.createElement('canvas');
 const renderer = new Canvas2DRenderer(canvas);
 let decoder;
 
