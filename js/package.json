@@ -1,0 +1,30 @@
+{
+  "name": "w_connect_js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:index": "esbuild src/index.mjs --bundle --outfile=dist/index.js",
+    "build:index:example": "esbuild src/index.mjs --bundle --outfile=../example/web/index.js",
+    "build:worker": "esbuild src/worker.mjs --bundle --outfile=dist/worker.js",
+    "build:worker:example": "esbuild src/worker.mjs --bundle --outfile=../example/web/worker.js",
+    "build": "npm run build:index && npm run build:worker",
+    "build:example": "npm run build:index:example && npm run build:worker:example"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@wagmi/core": "^1.4.3",
+    "@web3modal/wagmi": "^3.1.0",
+    "datastream-js": "^1.0.7",
+    "datastream.js": "^0.1.0",
+    "mp4box": "^0.5.2",
+    "viem": "^1.16.4"
+  },
+  "devDependencies": {
+    "@types/datastream.js": "^0.0.27",
+    "esbuild": "0.19.4"
+  }
+}

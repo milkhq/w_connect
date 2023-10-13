@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WalletConnect</title>
+  </head>
+  <style>
+    body {
+      padding: 0px;
+      margin: 0px;
+    }
+
+    .bg {
+      object-fit: cover;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      width: 80%;
+    }
+
+    .character {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 11;
+      width: 30%;
+    }
+    /* animate character up and down */
+    @keyframes float {
+      0% {
+        transform: translate(-50%, -50%) translateY(0px);
+      }
+      50% {
+        transform: translate(-50%, -50%) translateY(-10px);
+      }
+      100% {
+        transform: translate(-50%, -50%) translateY(0px);
+      }
+    }
+
+    #mitria {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    #blur-saturated-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px) saturate(200%);
+      /* for webkit */
+      -webkit-backdrop-filter: blur(10px) saturate(200%);
+      z-index: 12;
+    }
+  </style>
+  <body>
+    <img
+      src="https://mittaria.io/static/media/genesis-background.021f34afdca92c31b3ea.png"
+      class="bg"
+      alt="background"
+    />
+    <img
+      src="https://mittaria.io/static/media/mittaria-logo.26a722bc6c28bd3106b7.png"
+      class="logo"
+      alt="Mittaria logo"
+    />
+    <img
+      id="mitria"
+      src="https://mittaria.io/static/media/mitria-illustration.e4838eea25f291452797.png"
+      class="character"
+      alt="mitria"
+    />
+    <div id="blur-saturated-overlay"></div>
+    <script type="module" src="./dist.js"></script>
+    <script>
+      window.addEventListener("load", function (ev) {
+        window.connect();
+      });
+    </script>
+  </body>
+</html>
