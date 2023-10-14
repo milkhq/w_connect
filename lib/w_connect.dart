@@ -47,11 +47,9 @@ class WConnect {
     return WConnectPlatform.instance.loadVideoChunks(url: url);
   }
 
-  Future<void> decodeFrame({
-    required int index,
+  Future<void> decodeFrames({
     required void Function(Image img) callback,
   }) {
-    return WConnectPlatform.instance
-        .decodeFrame(index: index, callback: callback);
+    return WConnectPlatform.instance.decodeFrames(callback: callback);
   }
 }

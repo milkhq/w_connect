@@ -130,8 +130,7 @@ class WConnectWeb extends WConnectPlatform {
   }
 
   @override
-  Future<void> decodeFrame({
-    required int index,
+  Future<void> decodeFrames({
     required void Function(ui.Image img) callback,
   }) async {
     cb(Uint8ClampedList pixels, int width, int height) {

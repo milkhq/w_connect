@@ -66,8 +66,7 @@ abstract class WConnectPlatform extends PlatformInterface {
     throw UnimplementedError('loadVideoChunks() has not been implemented.');
   }
 
-  Future<void> decodeFrame({
-    required int index,
+  Future<void> decodeFrames({
     required void Function(Image img) callback,
   }) {
     throw UnimplementedError('loadVideoFrame() has not been implemented.');
