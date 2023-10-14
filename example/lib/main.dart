@@ -36,25 +36,28 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _wConnectPlugin.loadVideo(
-          url: './mittria_360.mp4',
-          callback: (img) {
-            setState(() {
-              _image = img;
-            });
-          },
-          onDone: () {
-            var currentFrame = 0;
-            Timer.periodic(Duration(milliseconds: 32), (timer) {
-              currentFrame++;
-              if (currentFrame > 238) {
-                currentFrame = 0;
-                return;
-              }
-              _wConnectPlugin.decodeFrameByIndex(index: currentFrame);
-            });
-            // _wConnectPlugin.decodeFrameByIndex(index: 0);
-          });
+      _wConnectPlugin
+          .loadVideoChunks(
+        url: './mittria_360.mp4',
+      )
+          .then((value) {
+        print('loadVideoChunks done');
+        int currentFrame = 0;
+        Timer.periodic(const Duration(milliseconds: 32), (timer) {
+          currentFrame++;
+          if (currentFrame > 238) {
+            currentFrame = 0;
+            return;
+          }
+          _wConnectPlugin.decodeFrame(
+              index: currentFrame,
+              callback: (img) {
+                setState(() {
+                  _image = img;
+                });
+              });
+        });
+      });
     });
   }
 

@@ -91699,6 +91699,40 @@ ${messageBytes.length}`);
     }
     decoder.decode(_chunks[index2]);
   };
+  window.loadVideoChunks = async (url, onDone) => {
+    const demuxer = new MP4Demuxer(url, {
+      onConfig(config2) {
+        _config = config2;
+      },
+      onChunk(chunk) {
+        _chunks.push(chunk);
+        if (_chunks.length == 239) {
+          onDone();
+        }
+      },
+      setStatus
+    });
+  };
+  window.decodeFrame = (index2, onFrame) => {
+    let currentFrame = 0;
+    const decoder2 = new VideoDecoder({
+      async output(frame) {
+        currentFrame++;
+        if (currentFrame == index2) {
+          const { pixels, height, width } = renderer.draw(frame);
+          onFrame(pixels, width, height);
+        } else {
+        }
+      },
+      error(e22) {
+        console.log(e22);
+      }
+    });
+    decoder2.configure(_config);
+    for (let i15 = 0; i15 < _chunks.length; i15++) {
+      decoder2.decode(_chunks[i15]);
+    }
+  };
   async function getVideoChunks(url, decoder2) {
     var chunks = [];
     var _config2 = null;

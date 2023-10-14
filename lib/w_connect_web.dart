@@ -2,6 +2,7 @@
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
+import 'dart:async';
 import 'dart:html' as html show window;
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
@@ -113,6 +114,35 @@ class WConnectWeb extends WConnectPlatform {
     required int index,
   }) {
     return context.callMethod('decodeFrameByIndex', [index]);
+  }
+
+  @override
+  Future<void> loadVideoChunks({required String url}) {
+    final completer = Completer<void>();
+
+    cb() {
+      completer.complete();
+    }
+
+    context.callMethod('loadVideoChunks', [url, cb]);
+
+    return completer.future;
+  }
+
+  @override
+  Future<void> decodeFrame({
+    required int index,
+    required void Function(ui.Image img) callback,
+  }) async {
+    cb(Uint8ClampedList pixels, int width, int height) {
+      ui.decodeImageFromPixels(
+          pixels.buffer.asUint8List(), width, height, ui.PixelFormat.rgba8888,
+          (result) {
+        callback(result);
+      });
+    }
+
+    context.callMethod('decodeFrame', [index, cb]);
   }
 }
 

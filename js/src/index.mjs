@@ -97,7 +97,7 @@ window.toggleMusic = function toggleMusic() {
 let _chunks = [];
 let _frames = [];
 let _config = null;
-const canvas = document.createElement('canvas');
+const canvas = document.createElement("canvas");
 const renderer = new Canvas2DRenderer(canvas);
 let decoder;
 
@@ -149,6 +149,46 @@ window.decodeFrameByIndex = (index) => {
     return;
   }
   decoder.decode(_chunks[index]);
+};
+
+window.loadVideoChunks = async (url, onDone) => {
+  const demuxer = new MP4Demuxer(url, {
+    onConfig(config) {
+      _config = config;
+    },
+    onChunk(chunk) {
+      _chunks.push(chunk);
+      if (_chunks.length == 239) {
+        onDone();
+      }
+    },
+    setStatus,
+  });
+};
+
+window.decodeFrame = (index, onFrame) => {
+  let currentFrame = 0;
+  const decoder = new VideoDecoder({
+    async output(frame) {
+      currentFrame++;
+      if (currentFrame == index) {
+        const { pixels, height, width } = renderer.draw(frame);
+        onFrame(pixels, width, height);
+        // frame.close();
+      } else {
+        // frame.close();
+      }
+    },
+    error(e) {
+      console.log(e);
+    },
+  });
+
+  decoder.configure(_config);
+
+  for (let i = 0; i < _chunks.length; i++) {
+    decoder.decode(_chunks[i]);
+  }
 };
 
 async function getVideoChunks(url, decoder) {

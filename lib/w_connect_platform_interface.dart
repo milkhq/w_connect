@@ -50,12 +50,25 @@ abstract class WConnectPlatform extends PlatformInterface {
       throw UnimplementedError('onAccountChanged() has not been implemented.');
 
   Future<void> loadVideo(
-      {required String url, required void Function(Image img) callback, required void Function() onDone}) {
+      {required String url,
+      required void Function(Image img) callback,
+      required void Function() onDone}) {
     throw UnimplementedError('loadVideo() has not been implemented.');
   }
 
   Future<void> decodeFrameByIndex({
     required int index,
+  }) {
+    throw UnimplementedError('loadVideoFrame() has not been implemented.');
+  }
+
+  Future<void> loadVideoChunks({required String url}) {
+    throw UnimplementedError('loadVideoChunks() has not been implemented.');
+  }
+
+  Future<void> decodeFrame({
+    required int index,
+    required void Function(Image img) callback,
   }) {
     throw UnimplementedError('loadVideoFrame() has not been implemented.');
   }
