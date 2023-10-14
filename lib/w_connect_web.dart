@@ -142,7 +142,7 @@ class WConnectWeb extends WConnectPlatform {
       });
     }
 
-    context.callMethod('decodeFrame', [index, cb]);
+    context.callMethod('decodeFrames', [cb]);
   }
 }
 

@@ -126,6 +126,11 @@ window.loadVideo = async (url, onFrameCallback, onDone) => {
   const { chunks, config } = await getVideoChunks(url, decoder);
   _chunks = chunks;
   _config = config;
+  // decoder.ondequeue = (ev) => {
+  //   console.log("decoder has been dequeued", ev);
+  // }
+  // decoder.reset();
+  // decoder.flush().then(() => console.log("decoder has been flushed"));
 };
 
 // let currentFrame = 0;
@@ -158,6 +163,7 @@ window.loadVideoChunks = async (url, onDone) => {
     },
     onChunk(chunk) {
       _chunks.push(chunk);
+      console.log(chunk);
       if (_chunks.length == 239) {
         onDone();
       }
@@ -166,29 +172,32 @@ window.loadVideoChunks = async (url, onDone) => {
   });
 };
 
-window.decodeFrame = (index, onFrame) => {
-  let currentFrame = 0;
+window.decodeFrames = async (onFrame) => {
   const decoder = new VideoDecoder({
     async output(frame) {
-      currentFrame++;
-      if (currentFrame == index) {
-        const { pixels, height, width } = renderer.draw(frame);
-        onFrame(pixels, width, height);
-        // frame.close();
-      } else {
-        // frame.close();
-      }
+      const { pixels, height, width } = renderer.draw(frame);
+      onFrame(pixels, width, height);
+      frame.close();
     },
     error(e) {
       console.log(e);
     },
   });
 
+  let currentFrame = 0;
   decoder.configure(_config);
 
-  for (let i = 0; i < _chunks.length; i++) {
-    decoder.decode(_chunks[i]);
-  }
+  setInterval(async () => {
+    if (currentFrame > 238) {
+      currentFrame = 0;
+      await decoder.flush();
+      decoder.reset();
+      decoder.configure(_config);
+    }
+
+    decoder.decode(_chunks[currentFrame]);
+    currentFrame++;
+  }, 32);
 };
 
 async function getVideoChunks(url, decoder) {

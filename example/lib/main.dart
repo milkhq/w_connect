@@ -41,22 +41,13 @@ class _MyAppState extends State<MyApp> {
         url: './mittria_360.mp4',
       )
           .then((value) {
-        print('loadVideoChunks done');
-        int currentFrame = 0;
-        Timer.periodic(const Duration(milliseconds: 32), (timer) {
-          currentFrame++;
-          if (currentFrame > 238) {
-            currentFrame = 0;
-            return;
-          }
-          _wConnectPlugin.decodeFrame(
-              index: currentFrame,
-              callback: (img) {
-                setState(() {
-                  _image = img;
-                });
+        _wConnectPlugin.decodeFrame(
+            index: 0,
+            callback: (img) {
+              setState(() {
+                _image = img;
               });
-        });
+            });
       });
     });
   }

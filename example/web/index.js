@@ -91706,6 +91706,7 @@ ${messageBytes.length}`);
       },
       onChunk(chunk) {
         _chunks.push(chunk);
+        console.log(chunk);
         if (_chunks.length == 239) {
           onDone();
         }
@@ -91713,25 +91714,29 @@ ${messageBytes.length}`);
       setStatus
     });
   };
-  window.decodeFrame = (index2, onFrame) => {
-    let currentFrame = 0;
+  window.decodeFrames = async (onFrame) => {
     const decoder2 = new VideoDecoder({
       async output(frame) {
-        currentFrame++;
-        if (currentFrame == index2) {
-          const { pixels, height, width } = renderer.draw(frame);
-          onFrame(pixels, width, height);
-        } else {
-        }
+        const { pixels, height, width } = renderer.draw(frame);
+        onFrame(pixels, width, height);
+        frame.close();
       },
       error(e22) {
         console.log(e22);
       }
     });
+    let currentFrame = 0;
     decoder2.configure(_config);
-    for (let i15 = 0; i15 < _chunks.length; i15++) {
-      decoder2.decode(_chunks[i15]);
-    }
+    setInterval(async () => {
+      if (currentFrame > 238) {
+        currentFrame = 0;
+        await decoder2.flush();
+        decoder2.reset();
+        decoder2.configure(_config);
+      }
+      decoder2.decode(_chunks[currentFrame]);
+      currentFrame++;
+    }, 32);
   };
   async function getVideoChunks(url, decoder2) {
     var chunks = [];
