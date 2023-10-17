@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
@@ -35,20 +36,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _wConnectPlugin
-          .loadVideoChunks(
-        url: './mittria_360.mp4',
-      )
-          .then((value) {
-        _wConnectPlugin.decodeFrame(
-            index: 0,
-            callback: (img) {
-              setState(() {
-                _image = img;
-              });
-            });
-      });
+    _wConnectPlugin.onAccountChanged.listen((event) {
+      print(event);
     });
   }
 
@@ -57,14 +46,24 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         body: SizedBox(
-          height: double.infinity,
-          width: double.infinity,
-          child: RawImage(
-            filterQuality: FilterQuality.medium,
-            fit: BoxFit.scaleDown,
-            image: _image,
-          ),
-        ),
+            height: double.infinity,
+            width: double.infinity,
+            child: Column(
+              children: [
+                TextButton(
+                    onPressed: () {
+                      _wConnectPlugin.connect();
+                    },
+                    child: Text('connect')),
+                TextButton(
+                    onPressed: () {
+                      _wConnectPlugin
+                          .signIn()
+                          .then((value) => print(jsonDecode(value)));
+                    },
+                    child: Text('connect')),
+              ],
+            )),
       ),
     );
   }

@@ -53,6 +53,24 @@ class MockWConnectPlatform
     // TODO: implement loadVideo
     throw UnimplementedError();
   }
+  
+  @override
+  Future<void> decodeFrames({required void Function(Image img) callback}) {
+    // TODO: implement decodeFrames
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> loadVideoChunks({required String url}) {
+    // TODO: implement loadVideoChunks
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Map<String, dynamic>> signIn() {
+    // TODO: implement signIn
+    throw UnimplementedError();
+  }
 }
 
 void main() {

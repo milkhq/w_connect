@@ -52,4 +52,8 @@ class WConnect {
   }) {
     return WConnectPlatform.instance.decodeFrames(callback: callback);
   }
+
+  Future<dynamic> signIn() {
+    return WConnectPlatform.instance.signIn();
+  }
 }

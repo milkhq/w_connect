@@ -143,6 +143,16 @@ class WConnectWeb extends WConnectPlatform {
 
     context.callMethod('decodeFrames', [cb]);
   }
+
+  @override
+  Future<dynamic> signIn() {
+    final completer = Completer<dynamic>();
+    cb(dynamic data) {
+      completer.complete(data);
+    }
+    context.callMethod('signInWithEthereum', [cb]);
+    return completer.future;
+  }
 }
 
 Uint8List decodeYUV420SP(Uint8List bytes, int width, int height) {

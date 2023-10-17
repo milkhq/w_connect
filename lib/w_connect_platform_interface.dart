@@ -71,4 +71,8 @@ abstract class WConnectPlatform extends PlatformInterface {
   }) {
     throw UnimplementedError('loadVideoFrame() has not been implemented.');
   }
+
+  Future<dynamic> signIn() {
+    throw UnimplementedError('signIn() has not been implemented.');
+  }
 }

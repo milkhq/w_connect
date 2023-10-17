@@ -3,6 +3,8 @@ import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi";
 import { mainnet, arbitrum } from "@wagmi/core/chains";
 import { watchAccount, disconnect, getAccount } from "@wagmi/core";
 import MP4Demuxer from "./demuxer.mjs";
+import { SiweMessage } from "siwe";
+import { signMessage } from "@wagmi/core";
 
 // 1. Define constants
 const projectId = "4981f85de0414a5c8dbb5fe6b44e90d7";
@@ -13,6 +15,49 @@ const metadata = {
   description: "Web3Modal Example",
   url: "https://web3modal.com",
   icons: ["https://avatars.githubusercontent.com/u/37784886"],
+};
+
+const domain = window.location.host;
+const origin = window.location.origin;
+const BACKEND_ADDR = "https://api-dev.mittaria.io";
+
+////////////////////////////////////////////////////////////////////////
+async function createSiweMessage(address, statement) {
+  const res = await fetch(`${BACKEND_ADDR}/nonce`);
+
+  const message = new SiweMessage({
+    domain,
+    address,
+    statement,
+    uri: origin,
+    version: "1",
+    chainId: "1",
+    nonce: (await res.text()).nonce,
+  });
+  return message.prepareMessage();
+}
+
+window.signInWithEthereum = async function signInWithEthereum(callback) {
+  if (!getAccount().isConnected) {
+    alert("Please connect your wallet first.");
+    await modal.open();
+    return;
+  }
+  console.log("signing in with ethereum", getAccount().address);
+  const message = await createSiweMessage(
+    getAccount().address,
+    "Sign in with Ethereum to the app."
+  );
+  const signature = await signMessage({ message });
+
+  const res = await fetch(`${BACKEND_ADDR}/me`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ message, signature }),
+  });
+  callback(await res.text());
 };
 
 const chains = [mainnet, arbitrum];
@@ -63,12 +108,11 @@ window.disconnect = async function disconnect() {
 
 window.init = () => {
   // listening for account changes
+  window.accountChangedCallback(getAccount().address)
   watchAccount((account) => {
     if (account.isConnected) {
-      eval({ name: "onAccountChanged", address: account.address });
       window.accountChangedCallback(account.address);
     } else {
-      eval({ name: "onAccountChanged", address: null });
       window.accountChangedCallback(null);
     }
   });
