@@ -75,4 +75,16 @@ abstract class WConnectPlatform extends PlatformInterface {
   Future<dynamic> signIn() {
     throw UnimplementedError('signIn() has not been implemented.');
   }
+
+  void playBackgroundTrack() {
+    throw UnimplementedError('playBackgroundTrack() has not been implemented.');
+  }
+
+  void stopBackgroundTrack() {
+    throw UnimplementedError('stopBackgroundTrack() has not been implemented.');
+  }
+
+  void toggleBackgroundTrack() {
+    throw UnimplementedError('toggleBackgroundTrack() has not been implemented.');
+  }
 }

@@ -150,8 +150,24 @@ class WConnectWeb extends WConnectPlatform {
     cb(dynamic data) {
       completer.complete(data);
     }
+
     context.callMethod('signInWithEthereum', [cb]);
     return completer.future;
+  }
+
+  @override
+  void playBackgroundTrack() {
+    context.callMethod('playBgMusic', []);
+  }
+
+  @override
+  void stopBackgroundTrack() {
+    context.callMethod('pauseBgMusic', []);
+  }
+
+  @override
+  void toggleBackgroundTrack() {
+    context.callMethod('toggleMusic', []);
   }
 }
 
